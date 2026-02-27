@@ -1,0 +1,7 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Contact: Digital Bazaar, Inc. <support@digitalbazaar.com>
+
+Files: *.md .editorconfig .gitignore package.json
+Copyright: 2024-2026 California Department of Motor Vehicles
+  2018-2026 Digital Bazaar, Inc.
+License: BSD-3-Clause
