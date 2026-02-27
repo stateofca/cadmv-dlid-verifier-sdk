@@ -118,8 +118,27 @@ describe('main', () => {
     expect(result).toHaveProperty('verified', true);
     expect(result).not.toHaveProperty('error');
   });
+  it('verifyStatus=true', async () => {
+    const result = await verify({
+      data: validUatExample, mode: 'uat', verifyStatus: true
+    });
+    expect(result).toHaveProperty('verified', true);
+    expect(result).not.toHaveProperty('error');
+  });
   it('no credentialStatus', async () => {
+    // verifyStatus defaults to false
+    const result = await verify({
+      data: validUatExample, mode: 'uat',
+      _test: {
+        noCredentialStatus: true
+      }
+    });
+    expect(result).toHaveProperty('verified', true);
+    expect(result).not.toHaveProperty('error');
+  });
+  it('verifyStatus=true, no credentialStatus', async () => {
     const result = await verify({data: validUatExample, mode: 'uat',
+      verifyStatus: true,
       _test: {
         noCredentialStatus: true
       }

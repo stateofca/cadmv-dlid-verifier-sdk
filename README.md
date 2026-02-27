@@ -69,11 +69,8 @@ Available options:
   - `'always'`:  Always verify, even if not required.
   - `'present'` Optional but always verify when present.
   - `'required'` Only verify when present or required by state and issued date.
-- `{string}` `[options.verifyStatus='always']` - Mode for verifying VCB
+- `{boolean}` `[options.verifyStatus=false]` - `true` to check VCB revocation
   status.
-  - `'always'`:  Always verify, even if not required.
-  - `'present'` Optional but always verify when present.
-  - `'never'`: Skip verification.
 - `{Function}` `[options.documentLoader=null]` - Override default
     `documentLoader`.
 - `{string}` `[options.mode='prod']` - Target deployment: 'prod' or 'uat'.
