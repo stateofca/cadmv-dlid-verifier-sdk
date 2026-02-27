@@ -74,10 +74,6 @@ Available options:
   - `'always'`:  Always verify, even if not required.
   - `'present'` Optional but always verify when present.
   - `'never'`: Skip verification.
-- `{boolean}` `[options.verifyBitstringStatusListCredential=true]` - Verify
-  status credential when verifying status.
-- `{boolean}` `[options.verifyMatchingIssuers=true]` - Verify issuer when
-  verifying status.
 - `{Function}` `[options.documentLoader=null]` - Override default
     `documentLoader`.
 - `{string}` `[options.mode='prod']` - Target deployment: 'prod' or 'uat'.
