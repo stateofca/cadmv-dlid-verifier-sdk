@@ -49,9 +49,9 @@ describe('main', () => {
     expect(result).toHaveProperty('verified', false);
     // TODO: check error
   });
-  it('verifyVCB=required, old issue date', async () => {
+  it('verifyVcb=required, old issue date', async () => {
     const result = await verify({data: validUatExample, mode: 'uat',
-      verifyVCB: 'required',
+      verifyVcb: 'required',
       _test: {
         issuedDateField: '07012025'
       }
@@ -59,9 +59,9 @@ describe('main', () => {
     expect(result).toHaveProperty('verified', true);
     expect(result).not.toHaveProperty('error');
   });
-  it('verifyVCB=always, old issue date', async () => {
+  it('verifyVcb=always, old issue date', async () => {
     const result = await verify({data: validUatExample, mode: 'uat',
-      verifyVCB: 'always',
+      verifyVcb: 'always',
       _test: {
         issuedDateField: '07012025'
       }
@@ -69,9 +69,9 @@ describe('main', () => {
     expect(result).toHaveProperty('verified', true);
     expect(result).not.toHaveProperty('error');
   });
-  it('verifyVCB=required, no vcb, old issue date', async () => {
+  it('verifyVcb=required, no vcb, old issue date', async () => {
     const result = await verify({data: validUatExample, mode: 'uat',
-      verifyVCB: 'required',
+      verifyVcb: 'required',
       _test: {
         issuedDateField: '07012025',
         vcb: false
@@ -80,9 +80,9 @@ describe('main', () => {
     expect(result).toHaveProperty('verified', true);
     expect(result).not.toHaveProperty('error');
   });
-  it('verifyVCB=always, no vcb, old issue date', async () => {
+  it('verifyVcb=always, no vcb, old issue date', async () => {
     const result = await verify({data: validUatExample, mode: 'uat',
-      verifyVCB: 'always',
+      verifyVcb: 'always',
       _test: {
         issuedDateField: '07012025',
         vcb: false
@@ -91,9 +91,9 @@ describe('main', () => {
     expect(result).toHaveProperty('verified', false);
     // TODO: check error
   });
-  it('verifyVCB=always, no vcb, not ca', async () => {
+  it('verifyVcb=always, no vcb, not ca', async () => {
     const result = await verify({data: validUatExample, mode: 'uat',
-      verifyVCB: 'always',
+      verifyVcb: 'always',
       _test: {
         issuedState: 'VA',
         vcb: false

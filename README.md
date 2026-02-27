@@ -65,7 +65,7 @@ Available options:
 - `{Uint8Array|string}` `options.data` - PDF417 bytes or string.
 - `{Uint8Array|string} `[options.encoding='utf8']` - String encoding if `data`
   is a string.
-- `{string}` `[options.verifyVCB='required']` - Mode for verifying VCB data.
+- `{string}` `[options.verifyVcb='required']` - Mode for verifying VCB data.
   - `'always'`:  Always verify, even if not required.
   - `'present'` Optional but always verify when present.
   - `'required'` Only verify when present or required by state and issued date.
