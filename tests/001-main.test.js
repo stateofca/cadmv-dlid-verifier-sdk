@@ -26,140 +26,240 @@ const validUatExampleBytes = encoder.encode(validUatExample);
 const invalidUatExampleBytes = encoder.encode(invalidUatExample);
 
 describe('main', () => {
+  it('bad data, uat', async () => {
+    const result = await verify({data: 'bogus', mode: 'uat'});
+    expect(result).toHaveProperty('issuerValid', false);
+    expect(result).toHaveProperty('vcbRequired', false);
+    expect(result).toHaveProperty('vcbPresent', false);
+    expect(result).toHaveProperty('verified', false);
+    expect(result).toHaveProperty('error.message',
+      'AAMVA CA issuer not found.');
+  });
+  it('bad issuer id [mock]', async () => {
+    const result = await verify({data: validUatExample, mode: 'uat',
+      _test: {
+        issuerId: 'bogus'
+      }
+    });
+    expect(result).toHaveProperty('issuerValid', false);
+    expect(result).toHaveProperty('vcbRequired', false);
+    expect(result).toHaveProperty('vcbPresent', false);
+    expect(result).toHaveProperty('verified', false);
+    expect(result).toHaveProperty('error.message',
+      'AAMVA CA issuer not found.');
+  });
+  it('bad DAJ field [mock]', async () => {
+    const result = await verify({data: validUatExample, mode: 'uat',
+      verifyVcb: 'always',
+      _test: {
+        issuedState: 'VA'
+      }
+    });
+    expect(result).toHaveProperty('issuerValid', false);
+    expect(result).toHaveProperty('vcbRequired', false);
+    expect(result).toHaveProperty('vcbPresent', false);
+    expect(result).toHaveProperty('verified', false);
+    expect(result).toHaveProperty('error.message',
+      'Invalid DAJ field: "VA".');
+  });
+
   it('valid data, string, uat', async () => {
     const result = await verify({data: validUatExample, mode: 'uat'});
+    expect(result).toHaveProperty('issuerValid', true);
+    expect(result).toHaveProperty('vcbRequired', false);
+    expect(result).toHaveProperty('vcbPresent', true);
     expect(result).toHaveProperty('verified', true);
     expect(result).not.toHaveProperty('error');
   });
   it('valid data, bytes, uat', async () => {
     const result = await verify({data: validUatExampleBytes, mode: 'uat'});
+    expect(result).toHaveProperty('issuerValid', true);
+    expect(result).toHaveProperty('vcbRequired', false);
+    expect(result).toHaveProperty('vcbPresent', true);
     expect(result).toHaveProperty('verified', true);
     expect(result).not.toHaveProperty('error');
   });
+
   it('invalid data, string, uat', async () => {
-    const result = await verify({data: invalidUatExample});
+    const result = await verify({data: invalidUatExample, mode: 'uat'});
+    expect(result).toHaveProperty('issuerValid', true);
+    expect(result).toHaveProperty('vcbRequired', false);
+    expect(result).toHaveProperty('vcbPresent', true);
     expect(result).toHaveProperty('verified', false);
-    // TODO: check error
+    expect(result).toHaveProperty('error');
+    expect(result).toHaveProperty(
+      'error.cause.errors[0].message', 'Invalid signature.');
   });
   it('invalid data, bytes, uat', async () => {
     const result = await verify({data: invalidUatExampleBytes, mode: 'uat'});
+    expect(result).toHaveProperty('issuerValid', true);
+    expect(result).toHaveProperty('vcbRequired', false);
+    expect(result).toHaveProperty('vcbPresent', true);
     expect(result).toHaveProperty('verified', false);
-    // TODO: check error
+    expect(result).toHaveProperty('error');
+    expect(result).toHaveProperty(
+      'error.cause.errors[0].message', 'Invalid signature.');
   });
-  it('no vcb', async () => {
+
+  it('valid on required date [mock]', async () => {
     const result = await verify({data: validUatExample, mode: 'uat',
       _test: {
-        vcb: false
+        issuedDateField: '09292025'
       }
     });
-    expect(result).toHaveProperty('verified', false);
-    // TODO: check error
-  });
-  it('verifyVcb=required, old issue date', async () => {
-    const result = await verify({data: validUatExample, mode: 'uat',
-      verifyVcb: 'required',
-      _test: {
-        issuedDateField: '07012025'
-      }
-    });
+    expect(result).toHaveProperty('issuerValid', true);
+    expect(result).toHaveProperty('vcbRequired', true);
+    expect(result).toHaveProperty('vcbPresent', true);
     expect(result).toHaveProperty('verified', true);
     expect(result).not.toHaveProperty('error');
   });
-  it('verifyVcb=always, old issue date', async () => {
+
+  it('has vcb, required by date [mock]', async () => {
     const result = await verify({data: validUatExample, mode: 'uat',
-      verifyVcb: 'always',
       _test: {
-        issuedDateField: '07012025'
+        issuedDateField: '10012025'
       }
     });
+    expect(result).toHaveProperty('issuerValid', true);
+    expect(result).toHaveProperty('vcbRequired', true);
+    expect(result).toHaveProperty('vcbPresent', true);
     expect(result).toHaveProperty('verified', true);
     expect(result).not.toHaveProperty('error');
   });
-  it('verifyVcb=required, no vcb, old issue date', async () => {
+  it('has vcb, requireVcb=true', async () => {
     const result = await verify({data: validUatExample, mode: 'uat',
-      verifyVcb: 'required',
-      _test: {
-        issuedDateField: '07012025',
-        vcb: false
-      }
+      requireVcb: true
     });
+    expect(result).toHaveProperty('issuerValid', true);
+    expect(result).toHaveProperty('vcbRequired', true);
+    expect(result).toHaveProperty('vcbPresent', true);
     expect(result).toHaveProperty('verified', true);
     expect(result).not.toHaveProperty('error');
   });
-  it('verifyVcb=always, no vcb, old issue date', async () => {
+  it('no vcb, required by date [mock]', async () => {
     const result = await verify({data: validUatExample, mode: 'uat',
-      verifyVcb: 'always',
       _test: {
-        issuedDateField: '07012025',
-        vcb: false
+        vcb: false,
+        issuedDateField: '10012025'
       }
     });
+    expect(result).toHaveProperty('issuerValid', true);
+    expect(result).toHaveProperty('vcbRequired', true);
+    expect(result).toHaveProperty('vcbPresent', false);
     expect(result).toHaveProperty('verified', false);
-    // TODO: check error
+    expect(result).toHaveProperty(
+      'error.message', 'VC Barcode data not found.');
   });
-  it('verifyVcb=always, no vcb, not ca', async () => {
+  it('no vcb, requiredVcb=true [mock]', async () => {
     const result = await verify({data: validUatExample, mode: 'uat',
-      verifyVcb: 'always',
+      requireVcb: true,
       _test: {
-        issuedState: 'VA',
         vcb: false
       }
     });
+    expect(result).toHaveProperty('issuerValid', true);
+    expect(result).toHaveProperty('vcbRequired', true);
+    expect(result).toHaveProperty('vcbPresent', false);
     expect(result).toHaveProperty('verified', false);
-    // TODO: check error
+    expect(result).toHaveProperty(
+      'error.message', 'VC Barcode data not found.');
   });
-  it('no vcb, not ca', async () => {
+
+  it('has vcb, not requied by date [mock]', async () => {
     const result = await verify({data: validUatExample, mode: 'uat',
       _test: {
-        issuedState: 'VA',
-        vcb: false
+        issuedDateField: '09282025'
       }
     });
+    expect(result).toHaveProperty('issuerValid', true);
+    expect(result).toHaveProperty('vcbRequired', false);
+    expect(result).toHaveProperty('vcbPresent', true);
     expect(result).toHaveProperty('verified', true);
     expect(result).not.toHaveProperty('error');
   });
+  it('has vcb, not required by date, requireVcb=true [mock]', async () => {
+    const result = await verify({data: validUatExample, mode: 'uat',
+      requireVcb: true,
+      _test: {
+        issuedDateField: '09282025'
+      }
+    });
+    expect(result).toHaveProperty('issuerValid', true);
+    expect(result).toHaveProperty('vcbRequired', true);
+    expect(result).toHaveProperty('vcbPresent', true);
+    expect(result).toHaveProperty('verified', true);
+    expect(result).not.toHaveProperty('error');
+  });
+  it('no vcb, not required by date, requireVcb=true [mock]', async () => {
+    const result = await verify({data: validUatExample, mode: 'uat',
+      requireVcb: true,
+      _test: {
+        vcb: false,
+        issuedDateField: '09282025'
+      }
+    });
+    expect(result).toHaveProperty('issuerValid', true);
+    expect(result).toHaveProperty('vcbRequired', true);
+    expect(result).toHaveProperty('vcbPresent', false);
+    expect(result).toHaveProperty('verified', false);
+    expect(result).toHaveProperty(
+      'error.message', 'VC Barcode data not found.');
+  });
+
   it('verifyStatus=true', async () => {
-    const result = await verify({
-      data: validUatExample, mode: 'uat', verifyStatus: true
+    const result = await verify({data: validUatExample, mode: 'uat',
+      verifyStatus: true
     });
+    expect(result).toHaveProperty('issuerValid', true);
+    expect(result).toHaveProperty('vcbRequired', false);
+    expect(result).toHaveProperty('vcbPresent', true);
     expect(result).toHaveProperty('verified', true);
     expect(result).not.toHaveProperty('error');
   });
-  it('no credentialStatus', async () => {
-    // verifyStatus defaults to false
-    const result = await verify({
-      data: validUatExample, mode: 'uat',
-      _test: {
-        noCredentialStatus: true
-      }
-    });
-    expect(result).toHaveProperty('verified', true);
-    expect(result).not.toHaveProperty('error');
-  });
-  it('verifyStatus=true, no credentialStatus', async () => {
+  it('verifyStatus=true, no credentialStatus [mock]', async () => {
     const result = await verify({data: validUatExample, mode: 'uat',
       verifyStatus: true,
       _test: {
         noCredentialStatus: true
       }
     });
+    expect(result).toHaveProperty('issuerValid', true);
+    expect(result).toHaveProperty('vcbRequired', false);
+    expect(result).toHaveProperty('vcbPresent', true);
     expect(result).toHaveProperty('verified', false);
-    // TODO: check error
+    expect(result).toHaveProperty(
+      'error.message', 'Status error');
+    expect(result).toHaveProperty(
+      'error.cause.message', '"credentialStatus" property not found.');
   });
-  it('revoked', async () => {
+  it('verifyStatus=true, mock revoked [mock]', async () => {
     const result = await verify({data: validUatExample, mode: 'uat',
+      verifyStatus: true,
       _test: {
         checkStatusError: true
       }
     });
+    expect(result).toHaveProperty('issuerValid', true);
+    expect(result).toHaveProperty('vcbRequired', false);
+    expect(result).toHaveProperty('vcbPresent', true);
     expect(result).toHaveProperty('verified', false);
-    // TODO: check error
+    expect(result).toHaveProperty(
+      'error.message', 'Status error');
+    expect(result).toHaveProperty(
+      'error.cause.message', '**TEST**: Status check failed.');
   });
   it('reject uat in prod mode', async () => {
     const result = await verify({data: validUatExample});
+    expect(result).toHaveProperty('issuerValid', true);
+    expect(result).toHaveProperty('vcbRequired', false);
+    expect(result).toHaveProperty('vcbPresent', true);
     expect(result).toHaveProperty('verified', false);
-    // TODO: check error
+    expect(result).toHaveProperty(
+      'error.message', 'Verify error');
+    expect(result).toHaveProperty('error.cause.errors[0].message');
+    expect(result.error.cause.errors[0].message).toMatch(
+      /^URL not allowed: /);
   });
   // FIXME: needs test vector(s) with prod URLs
-  it('reject prod in uat mode');
+  it.skip('reject prod in uat mode');
 });

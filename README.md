@@ -52,7 +52,10 @@ The main function of this library is `async verify(options)`.
 Basic usage:
 
 ```js
-const result = await verify({data: scannedPdf417Data});
+import {verify} from 'cadmv-dlid-verifier-sdk';
+const result = await verify({
+  data: scannedPdf417Data
+});
 if(result.verified) {
   // data verified
 } else {
@@ -60,15 +63,33 @@ if(result.verified) {
 }
 ```
 
+Force VCB data to be required:
+
+```js
+import {verify} from 'cadmv-dlid-verifier-sdk';
+const result = await verify({
+  data: scannedPdf417Data,
+  requireVcb: true
+});
+```
+
+Enable VCB revocation status verification:
+
+```js
+import {verify} from 'cadmv-dlid-verifier-sdk';
+const result = await verify({
+  data: scannedPdf417Data,
+  verifyStatus: true
+});
+```
+
 Available options:
 
 - `{Uint8Array|string}` `options.data` - PDF417 bytes or string.
 - `{Uint8Array|string} `[options.encoding='utf8']` - String encoding if `data`
   is a string.
-- `{string}` `[options.verifyVcb='required']` - Mode for verifying VCB data.
-  - `'always'`:  Always verify, even if not required.
-  - `'present'` Optional but always verify when present.
-  - `'required'` Only verify when present or required by state and issued date.
+- `{boolean}` `[options.requireVcb=false]` - `true` to require VCB data be
+  present.
 - `{boolean}` `[options.verifyStatus=false]` - `true` to check VCB revocation
   status.
 - `{Function}` `[options.documentLoader=null]` - Override default
@@ -76,12 +97,15 @@ Available options:
 - `{string}` `[options.mode='prod']` - Target deployment: 'prod' or 'uat'.
 - `{boolean}` `[options.debug=false]` - Return debug details.
 
-See the code for other advanced options.
-
 Returns object with fields:
 
-- `verified`: Boolean indicating if data is verified.
-- `error`: Error when verified is `false`.
+- `verified`: `true` if VCB data verified.
+- `issuerValid`: `true` if AAMVA issuer data is valid.
+- `vcbRequired`: `true` if AAMVA issuer data is valid and VCB data is required
+  due to data or option.
+- `vcbPresent`: `true` if AAMVA issuer data is valid and VCB data is present.
+- `error`: Error if not verified.
+- `debug`: Debug details object when requested.
 
 ## Contribute
 
