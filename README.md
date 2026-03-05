@@ -56,10 +56,10 @@ import {verify} from 'cadmv-dlid-verifier-sdk';
 const result = await verify({
   data: scannedPdf417Data
 });
-if(result.verified) {
-  // data verified
+if(result.valid) {
+  // data valid
 } else {
-  // not verified, handle result.error if needed
+  // not valid, handle result.error if needed
 }
 ```
 
@@ -93,19 +93,16 @@ Available options:
 - `{boolean}` `[options.verifyStatus=false]` - `true` to check VCB revocation
   status.
 - `{Function}` `[options.documentLoader=null]` - Override default
-    `documentLoader`.
+  `documentLoader`.
 - `{string}` `[options.mode='prod']` - Target deployment: 'prod' or 'uat'.
-- `{boolean}` `[options.debug=false]` - Return debug details.
+- `{boolean}` `[options.debug=false]` - `true` to return debug details.
+  Properties are informative only and subject to change.
 
 Returns object with fields:
 
-- `verified`: `true` if VCB data verified.
-- `issuerValid`: `true` if AAMVA issuer data is valid.
-- `vcbRequired`: `true` if AAMVA issuer data is valid and VCB data is required
-  due to data or option.
-- `vcbPresent`: `true` if AAMVA issuer data is valid and VCB data is present.
-- `error`: Error if not verified.
-- `debug`: Debug details object when requested.
+- `valid`: `true` if data is valid.
+- `error`: Error details if data is not valid.
+- `debug`: Debug details object if requested.
 
 ## Contribute
 
