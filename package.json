@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/digitalbazaar/cadmv-dlid-verifier-sdk.git"
+    "url": "https://github.com/stateofca/cadmv-dlid-verifier-sdk.git"
   },
   "keywords": [
     "ca dmv",
@@ -30,9 +30,9 @@
   },
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/digitalbazaar/cadmv-dlid-verifier-sdk/issues"
+    "url": "https://github.com/stateofca/cadmv-dlid-verifier-sdk/issues"
   },
-  "homepage": "https://github.com/digitalbazaar/cadmv-dlid-verifier-sdk#readme",
+  "homepage": "https://github.com/stateofca/cadmv-dlid-verifier-sdk#readme",
   "dependencies": {
     "@digitalbazaar/cborld": "^8.0.2",
     "@digitalbazaar/credentials-context": "^3.2.0",

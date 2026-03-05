@@ -36,7 +36,7 @@ npm install cadmv-dlid/verifier-sdk
 To install locally for development:
 
 ```sh
-git clone https://github.com/digitalbazaar/cadmv-dlid-verifier-sdk.git
+git clone https://github.com/stateofca/cadmv-dlid-verifier-sdk.git
 cd cadmv-dlid-verifier-sdk
 npm install
 ```
