@@ -1,14 +1,19 @@
-# CA DMV DL/ID Verifier SDK _(cadmv-dlid-verifier-sdk)_
+# Verify California Driver's Licenses and Identity Cards
 
-> A JavaScript library to verify CA DMV DL/IDs with PDF417 Verifiable
-> Credential Barcodes data.
+> A JavaScript library to verify California Department of Motor Vehicle
+> (CA DMV) Driver's Licenses and Identification Cards.
+
+Press release: [DMV to Releases New California Driver’s License and Identification Card Design with Advanced Security Features](https://www.dmv.ca.gov/portal/news-and-media/dmv-to-release-new-california-drivers-license-and-identification-card-design-with-advanced-security-features/)
+
+Public Website: [The California Driver's License Digital Signature](https://www.dmv.ca.gov/portal/driver-licenses-identification-cards/digital-signature/)
+
+Documentation: [Verifying Digital Signatures on California DL/ID Documents](https://www.dmv.ca.gov/portal/file/verifying-digital-signatures-on-california-dlid-documents-pdf/)
 
 ## Table of Contents
 
 - [Features](#features)
 - [Install](#install)
 - [Usage](#usage)
-- [API](#api)
 - [Contribute](#contribute)
 - [Commercial Support](#commercial-support)
 - [License](#license)
@@ -18,10 +23,8 @@
 This library provides an API for Web browsers and Node.js to verify CA DMV
 DL/ID PDF417 [Verifiable Credential Barcodes][] data.
 
-- Designed to handle the limited use case of the VCB data on current Drivers
-  Licenses and IDs.
-- Restricts the resources that can be loaded during verification to those
-  hosted by CA DMV.
+- Designed to handle the VCB data on current California Drivers Licenses and IDs.
+- Restricts the resources that can be loaded during verification to those hosted by CA DMV.
 
 ## Install
 
@@ -43,9 +46,10 @@ npm install
 
 ## Usage
 
-Once PDF417 data has been scanned, the string or bytes can be sent to the
-`verify` function. This function will check for [Verifiable Credential
-Barcodes][] data and perform verification.
+Once PDF417 data has been scanned (out of scope for this library, 
+the string or bytes can be sent to the `verify` function. This 
+function will check for [Verifiable Credential Barcodes][]
+data and perform verification.
 
 The main function of this library is `async verify(options)`.
 
@@ -106,9 +110,7 @@ Returns object with fields:
 
 ## Contribute
 
-Please follow the existing code style.
-
-PRs accepted.
+Please follow the existing code style. Pull requests are accepted.
 
 If editing the README, please conform to the
 [standard-readme](https://github.com/RichardLitt/standard-readme) specification.
